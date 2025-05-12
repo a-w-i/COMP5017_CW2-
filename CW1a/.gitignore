@@ -1,0 +1,20 @@
+# Ignore class files and compiled output
+*.class
+/out/
+/build/
+/dist/
+
+# IntelliJ files
+.idea/
+*.iml
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*~
+*.swp
