@@ -86,6 +86,8 @@ public class CW1 {
                     System.out.print("Name? ");
                     name = readAcceptable();
                     resp = db.get(name);
+                    System.out.println("Nodes visited during get(): " + db.getTotalVisited());
+                    db.resetTotalVisited();
                     if (resp != null) {
                         System.out.println(resp.toString());
                     } else {
@@ -194,6 +196,6 @@ public class CW1 {
             System.out.println("Can't open chosen file " + fileName);
         }
     }
-
 }
+
 
