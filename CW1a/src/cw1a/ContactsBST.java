@@ -15,6 +15,7 @@ public  class ContactsBST implements  IContactDB {
     }
     private Node root; // this is the tree
     private int numEntries;
+    private int totalVisited;
 
     public ContactsBST() {
         System.out.println("Binary Search Tree");
@@ -29,6 +30,7 @@ public  class ContactsBST implements  IContactDB {
     public void clearDB() {
         root = null; // garbage collector will tidy up
         numEntries = 0;
+        totalVisited = 0;
     }
 
     /**
@@ -39,13 +41,20 @@ public  class ContactsBST implements  IContactDB {
      */
     @Override
     public boolean containsName(String name) {
-        return get(name) != null;
+        resetTotalVisited();
+        Contact found = retrieve(root, name);
+        System.out.println("[containsName] Contact: " + name);
+        System.out.println("[containsName] Nodes visited: " + totalVisited);
+        return found != null;
     }
 
     private Contact retrieve(Node tree, String name) {
         if (tree == null || name == null || name.trim().isEmpty()) {
             return null;
         }
+
+        totalVisited++;
+        System.out.println("Visited node: " + tree.data.getName());
 
         int comparison = name.compareTo(tree.data.getName());
         if (comparison == 0) {
@@ -67,7 +76,11 @@ public  class ContactsBST implements  IContactDB {
     @Override
     public Contact get(String name){
         assert name != null && !name.trim().isEmpty() : "Name must not be null or empty";
-        return retrieve(root, name);
+        resetTotalVisited();
+        Contact result = retrieve(root, name);
+        System.out.println("[get] Contact: " + name);
+        System.out.println("[get] Nodes visited: " + totalVisited);
+        return result;
     }
 
     /**
@@ -123,8 +136,11 @@ public  class ContactsBST implements  IContactDB {
     public Contact put(Contact contact){
         assert contact != null && !contact.getName().trim().isEmpty() : "Contact must be valid and name non-empty";
 
+        resetTotalVisited();
         Contact returned = get(contact.getName());
         root = insert(root, contact);
+        System.out.println("[put] Contact: " + contact.getName());
+        System.out.println("[put] Nodes visited: " + totalVisited);
         return returned;
     }
 
@@ -140,10 +156,14 @@ public  class ContactsBST implements  IContactDB {
     public Contact remove(String name){
         assert name != null && !name.trim().isEmpty() : "Name must not be null or empty";
 
+        resetTotalVisited();
+        System.out.println("[remove] Contact: " + name);
         Node parent = null, del, p = null, q = null;
         Contact result;
         del = root;
         while (del != null && !del.data.getName().equals(name)) {
+            totalVisited++;
+            System.out.println("Visited node: " + del.data.getName());
             parent = del;
             if (name.compareTo(del.data.getName()) < 0)
                 del = del.left;
@@ -151,12 +171,18 @@ public  class ContactsBST implements  IContactDB {
                 del = del.right;
         }
         if(del != null) {
+            totalVisited++;
+            System.out.println("Visited node: " + del.data.getName());
             if (del.right == null) p = del.left;
             else if (del.right.left == null) {
                 p = del.right; p.left = del.left;
             } else {
                 p = del.right;
-                while (p.left != null) {q = p; p = p.left;}
+                while (p.left != null) {
+                    totalVisited++;
+                    System.out.println("Visited node: " + p.data.getName());
+                    q = p; p = p.left;
+                }
                 q.left = p.right; p.left = del.left; p.right = del.right;
             }
             if(del == root) root = p;
@@ -167,6 +193,8 @@ public  class ContactsBST implements  IContactDB {
             result = del.data;
         }
         else result = null;
+
+        System.out.println("[remove] Nodes visited: " + totalVisited);
         return result;
     }
 
@@ -186,7 +214,7 @@ public  class ContactsBST implements  IContactDB {
 
     @Override
     public void resetTotalVisited() {
-        // No internal tracking yet, so you can leave this empty for now
+        totalVisited = 0;
     }
 
     /**
@@ -195,7 +223,7 @@ public  class ContactsBST implements  IContactDB {
      */
     @Override
     public int getTotalVisited() {
-        return 0; // You can update this later when you track visits
+        return totalVisited;
     }
 
     /**
@@ -207,3 +235,4 @@ public  class ContactsBST implements  IContactDB {
         return numEntries;
     }
 }
+
