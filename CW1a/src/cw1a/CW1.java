@@ -15,22 +15,22 @@ public class CW1 {
 
     private static Scanner keyboard;
     private static String fileName = "no file choaen";
-    
-    private static IContactDB db = new ContactsHashOpen(); 
+
+    private static IContactDB db = new ContactsBST();
     // change to ContactsHashChained for later part of Coursework 1
     // change to ContactsBST for Coursework 2
 
     private static boolean acceptable(char ch) {
         return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' ||
                 ch == ' ' || ch == ',' || ch == '@' || ch == '.' ||
-                ch == '-'; 
+                ch == '-';
     }
 
     private static boolean allAcceptable(String s) {
         int i = 0;
         while (i != s.length() && acceptable(s.charAt(i))) i++;
         return i == s.length();
-     }
+    }
 
     private static String readAcceptable() {
         // read non-null, non-empty string;
@@ -80,7 +80,7 @@ public class CW1 {
                 case 's':  //size
                     System.out.println("Size " + db.size());
                     break;
-                    
+
                 case 'G':
                 case 'g':  // get
                     System.out.print("Name? ");
@@ -122,8 +122,8 @@ public class CW1 {
                     System.out.println("unknown option");
 
             } // switch
-                    System.out.println();
-                    System.out.print("D)isplay  P)ut  G)et  C)ontains  S)ize  R)emove  Q)uit? ");
+            System.out.println();
+            System.out.print("D)isplay  P)ut  G)et  C)ontains  S)ize  R)emove  Q)uit? ");
             option = readAcceptable();
         } // while
     }
@@ -150,7 +150,7 @@ public class CW1 {
             System.out.println("No file selected. input from keyboard.");
             fileName = "no file chosen";
             f = null;
-          
+
             // f = fc.getSelectedFile();
         } else { // user selected a file ok
             fileName = fc.getSelectedFile().getName();
@@ -159,7 +159,7 @@ public class CW1 {
         }
         return f;
     }
-    
+
     private static String startFolder = ".";
 
     private static void loadFile() {
@@ -186,9 +186,9 @@ public class CW1 {
                 text.close();
                 totalVisited = db.getTotalVisited();
                 System.out.println("total number of  buckets visited = " + totalVisited);
-                System.out.printf("average number of  buckets visited =  %.2f", 
-                  totalVisited /(double)db.getNumEntries());
-        System.out.println();
+                System.out.printf("average number of  buckets visited =  %.2f",
+                        totalVisited / (double) db.getNumEntries());
+                System.out.println();
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Can't open chosen file " + fileName);
